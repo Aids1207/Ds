@@ -1,0 +1,75 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Graph {
+    int vertices;
+    struct Node** adjList;
+};
+
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
+
+struct Graph* createGraph(int vertices) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->vertices = vertices;
+    graph->adjList = (struct Node**)malloc(vertices * sizeof(struct Node*));
+
+    for (int i = 0; i < vertices; i++) {
+        graph->adjList[i] = NULL;
+    }
+
+    return graph;
+}
+
+void addEdge(struct Graph* graph, int start, int end) {
+    struct Node* new_node = newNode(end);
+    new_node->next = graph->adjList[start];
+    graph->adjList[start] = new_node;
+
+    new_node = newNode(start);
+    new_node->next = graph->adjList[end];
+    graph->adjList[end] = new_node;  // For undirected graph
+}
+
+void printGraph(struct Graph* graph) {
+    for (int i = 0; i < graph->vertices; i++) {
+        struct Node* temp = graph->adjList[i];
+        printf("\nVertex %d:", i);
+        while (temp) {
+            printf(" %d", temp->data);
+            temp = temp->next;
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int vertices, edges, start, end;
+    printf("Enter number of vertices: ");
+    scanf("%d", &vertices);
+
+    struct Graph* graph = createGraph(vertices);
+
+    printf("Enter number of edges: ");
+    scanf("%d", &edges);
+
+    for (int i = 0; i < edges; i++) {
+        printf("Enter edge (start end): ");
+        scanf("%d %d", &start, &end);
+        addEdge(graph, start, end);
+    }
+
+    printf("\nAdjacency List Representation of the Graph:\n");
+    printGraph(graph);
+
+    return 0;
+}
