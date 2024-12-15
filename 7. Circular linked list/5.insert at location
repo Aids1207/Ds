@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = newNode;
+    return newNode;
+}
+
+void insertAtLocation(struct Node** head, int data, int position) {
+    struct Node* newNode = createNode(data);
+
+    if (position == 1) {
+        if (*head == NULL) {
+            *head = newNode;
+        } else {
+            struct Node* temp = *head;
+            while (temp->next != *head) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+            newNode->next = *head;
+            *head = newNode;
+        }
+        return;
+    }
+
+    struct Node* temp = *head;
+    int currentPosition = 1;
+
+    while (temp->next != *head && currentPosition < position - 1) {
+        temp = temp->next;
+        currentPosition++;
+    }
+
+    if (currentPosition == position - 1) {
+        newNode->next = temp->next;
+        temp->next = newNode;
+    } else {
+        printf("Invalid position.\n");
+    }
+}
+
+void printList(struct Node* head) {
+    if (head == NULL) {
+        printf("The list is empty.\n");
+        return;
+    }
+
+    struct Node* temp = head;
+    do {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+
+    insertAtLocation(&head, 10, 1);
+    insertAtLocation(&head, 20, 2);
+    insertAtLocation(&head, 30, 3);
+    insertAtLocation(&head, 25, 3);  // Insert at position 3
+
+    printf("Circular Linked List: ");
+    printList(head);
+
+    return 0;
+}
