@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+#define MAX_VERTICES 10
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Graph {
+    int vertices;
+    struct Node** adjList;
+};
+
+struct Node* newNode(int data) {
+    struct Node* node = (struct Node*)malloc(sizeof(struct Node));
+    node->data = data;
+    node->next = NULL;
+    return node;
+}
+
+struct Graph* createGraph(int vertices) {
+    struct Graph* graph = (struct Graph*)malloc(sizeof(struct Graph));
+    graph->vertices = vertices;
+    graph->adjList = (struct Node**)malloc(vertices * sizeof(struct Node*));
+
+    for (int i = 0; i < vertices; i++) {
+        graph->adjList[i] = NULL;
+    }
+
+    return graph;
+}
+
+void addEdge(struct Graph* graph, int start, int end) {
+    struct Node* new_node = newNode(end);
+    new_node->next = graph->adjList[start];
+    graph->adjList[start] = new_node;
+}
+
+void bfs(struct Graph* graph, int startVertex) {
+    bool visited[MAX_VERTICES] = {false};
+    int queue[MAX_VERTICES], front = 0, rear = 0;
+
+    visited[startVertex] = true;
+    queue[rear++] = startVertex;
+
+    while (front != rear) {
+        int currentVertex = queue[front++];
+        printf("%d ", currentVertex);
+
+        struct Node* temp = graph->adjList[currentVertex];
+        while (temp) {
+            int adjVertex = temp->data;
+            if (!visited[adjVertex]) {
+                visited[adjVertex] = true;
+                queue[rear++] = adjVertex;
+            }
+            temp = temp->next;
+        }
+    }
+    printf("\n");
+}
+
+int main() {
+    int vertices, edges, start, end;
+    printf("Enter number of vertices: ");
+    scanf("%d", &vertices);
+
+    struct Graph* graph = createGraph(vertices);
+
+    printf("Enter number of edges: ");
+    scanf("%d", &edges);
+
+    for (int i = 0; i < edges; i++) {
+        printf("Enter edge (start end): ");
+        scanf("%d %d", &start, &end);
+        addEdge(graph, start, end);
+    }
+
+    int startVertex;
+    printf("Enter the start vertex for BFS: ");
+    scanf("%d", &startVertex);
+
+    printf("Breadth-First Search starting from vertex %d:\n", startVertex);
+    bfs(graph, startVertex);
+
+    return 0;
+}
