@@ -1,0 +1,61 @@
+#include <stdio.h>
+
+void add(int a, int b);
+void sub(int a, int b);
+void mul(int a, int b);
+void div(int a, int b);
+
+int main() {
+    int ch, a, b;
+
+    while(1) {
+        printf("\nEnter your choice");
+        printf("\n1) Addition 2) Subtraction 3) Multiplication 4) Division 5) Exit: ");
+        if (scanf("%d", &ch) != 1) {
+            printf("Invalid input! Please enter a valid choice.\n");
+            while(getchar() != '\n');
+            continue;
+        }
+
+        if (ch == 5) {
+            break;
+        } else {
+            printf("Enter two numbers: ");
+            if (scanf("%d %d", &a, &b) != 2) {
+                printf("Invalid input! Please enter valid numbers.\n");
+                while(getchar() != '\n');
+                continue;
+            }
+
+            switch(ch) {
+                case 1: add(a, b); break;
+                case 2: sub(a, b); break;
+                case 3: mul(a, b); break;
+                case 4: div(a, b); break;
+                default: printf("Invalid choice.\n"); break;
+            }
+        }
+    }
+
+    return 0;
+}
+
+void add(int a, int b) {
+    printf("Result: %d\n", a + b);
+}
+
+void sub(int a, int b) {
+    printf("Result: %d\n", a - b);
+}
+
+void mul(int a, int b) {
+    printf("Result: %d\n", a * b);
+}
+
+void div(int a, int b) {
+    if (b != 0) {
+        printf("Result: %d\n", a / b);
+    } else {
+        printf("Division by zero is not possible.\n");
+    }
+}
