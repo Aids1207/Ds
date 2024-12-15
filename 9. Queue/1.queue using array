@@ -1,0 +1,87 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#define MAX 6
+
+int intarray[MAX];
+int front = 0;
+int rear = -1;
+int itemcount = 0;
+
+int peek() {
+    return intarray[front];
+}
+
+bool isempty() {
+    return itemcount == 0;
+}
+
+bool isfull() {
+    return itemcount == MAX;
+}
+
+int size() {
+    printf("Size is %d\n", itemcount);
+    return itemcount;
+}
+
+void insert(int data) {
+    if (!isfull()) {
+        if (rear == MAX - 1) {
+            rear = -1;
+        }
+        intarray[++rear] = data;
+        itemcount++;
+    } else {
+        printf("Queue is full. Cannot insert %d\n", data);
+    }
+}
+
+int removedata() {
+    if (!isempty()) {
+        int data = intarray[front++];
+        if (front == MAX) {
+            front = 0;
+        }
+        itemcount--;
+        return data;
+    } else {
+        printf("Queue is empty. Cannot remove data.\n");
+        return -1;
+    }
+}
+
+void display() {
+    if (isempty()) {
+        printf("Queue is empty.\n");
+        return;
+    }
+    printf("Queue elements: ");
+    int i = front;
+    for (int count = 0; count < itemcount; count++) {
+        printf("%d ", intarray[i]);
+        i = (i + 1) % MAX;  // Circular increment
+    }
+    printf("\n");
+}
+
+int main() {
+    insert(3);
+    insert(5);
+    insert(9);
+    insert(1);
+    insert(12);
+    insert(15);
+    size();
+    display();
+
+    printf("Removed: %d\n", removedata());
+    size();
+    display();
+
+    insert(7);
+    size();
+    display();
+
+    return 0;
+}
