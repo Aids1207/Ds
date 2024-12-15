@@ -1,0 +1,48 @@
+#include <stdio.h>
+
+#define MAX_VERTICES 10
+
+void initializeGraph(int graph[MAX_VERTICES][MAX_VERTICES], int vertices) {
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            graph[i][j] = 0;
+        }
+    }
+}
+
+void addEdge(int graph[MAX_VERTICES][MAX_VERTICES], int start, int end) {
+    graph[start][end] = 1;
+}
+
+void printGraph(int graph[MAX_VERTICES][MAX_VERTICES], int vertices) {
+    for (int i = 0; i < vertices; i++) {
+        for (int j = 0; j < vertices; j++) {
+            printf("%d ", graph[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    int graph[MAX_VERTICES][MAX_VERTICES];
+    int vertices, edges, start, end;
+
+    printf("Enter the number of vertices: ");
+    scanf("%d", &vertices);
+
+    initializeGraph(graph, vertices);
+
+    printf("Enter the number of edges: ");
+    scanf("%d", &edges);
+
+    for (int i = 0; i < edges; i++) {
+        printf("Enter edge (start end): ");
+        scanf("%d %d", &start, &end);
+        addEdge(graph, start, end);
+    }
+
+    printf("\nAdjacency Matrix of the Graph:\n");
+    printGraph(graph, vertices);
+
+    return 0;
+}
