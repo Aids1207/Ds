@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+    struct Node* prev;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    if (newNode == NULL) {
+        printf("Memory allocation failed!\n");
+        exit(1);
+    }
+    newNode->data = data;
+    newNode->next = NULL;
+    newNode->prev = NULL;
+    return newNode;
+}
+
+void insertAtLocation(struct Node** head, int data, int position) {
+    struct Node* newNode = createNode(data);
+    
+    if (position <= 0) {
+        printf("Invalid position! Insertion aborted.\n");
+        return;
+    }
+
+    if (position == 1) {
+        newNode->next = *head;
+        if (*head != NULL) {
+            (*head)->prev = newNode;
+        }
+        *head = newNode;
+        return;
+    }
+
+    struct Node* temp = *head;
+    int currentPos = 1;
+
+    while (temp != NULL && currentPos < position - 1) {
+        temp = temp->next;
+        currentPos++;
+    }
+
+    if (temp == NULL) {
+        printf("Position is out of range! Insertion aborted.\n");
+        free(newNode);
+        return;
+    }
+
+    newNode->next = temp->next;
+    newNode->prev = temp;
+
+    if (temp->next != NULL) {
+        temp->next->prev = newNode;
+    }
+
+    temp->next = newNode;
+}
+
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d <-> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+int main() {
+    struct Node* head = NULL;
+
+    insertAtLocation(&head, 10, 1);
+    insertAtLocation(&head, 20, 2);
+    insertAtLocation(&head, 30, 3);
+    insertAtLocation(&head, 40, 2);
+
+    printf("Doubly Linked List after insertions: ");
+    printList(head);
+
+    return 0;
+}
